@@ -1,17 +1,24 @@
 package com.todoapp.myplanner_be.controller;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todoapp.myplanner_be.dto.task.CreateTaskDTO;
+import com.todoapp.myplanner_be.dto.task.TaskResponseDTO;
 import com.todoapp.myplanner_be.dto.task.UpdateTaskDTO;
 import com.todoapp.myplanner_be.response.ApiResponse;
 import com.todoapp.myplanner_be.service.TaskService;
@@ -91,6 +98,28 @@ public class TaskController {
         
         taskService.deleteTask(taskId, userId);
         ApiResponse<Object> response = ApiResponse.success("Task deleted successfully");
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(
+        summary = "Get tasks by date range",
+        description = "Fetches all tasks for the authenticated user, optionally filtered by date range. Returns tasks with category and status information. Requires valid JWT token."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/get")
+    public ResponseEntity<ApiResponse<List<TaskResponseDTO>>> getTasks(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            HttpServletRequest request) {
+        
+        Integer userId = AuthUtil.getUserIdFromRequest(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Unauthorized", HttpStatus.UNAUTHORIZED.value()));
+        }
+        
+        List<TaskResponseDTO> tasks = taskService.getTasksByDateRange(userId, startDate, endDate);
+        ApiResponse<List<TaskResponseDTO>> response = ApiResponse.success(tasks, "Tasks fetched successfully");
         return ResponseEntity.ok(response);
     }
 }

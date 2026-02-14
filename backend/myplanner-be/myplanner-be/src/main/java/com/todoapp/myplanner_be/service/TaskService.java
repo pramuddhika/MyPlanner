@@ -1,11 +1,14 @@
 package com.todoapp.myplanner_be.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.todoapp.myplanner_be.dto.task.CreateTaskDTO;
+import com.todoapp.myplanner_be.dto.task.TaskResponseDTO;
 import com.todoapp.myplanner_be.dto.task.UpdateTaskDTO;
 import com.todoapp.myplanner_be.entity.CategoryList;
 import com.todoapp.myplanner_be.entity.StatusEntity;
@@ -159,5 +162,47 @@ public class TaskService {
         
         // Delete the task
         taskRepository.delete(task);
+    }
+    
+    public List<TaskResponseDTO> getTasksByDateRange(Integer userId, LocalDateTime startDate, LocalDateTime endDate) {
+        // Fetch tasks from repository
+        List<TaskEntity> tasks = taskRepository.findByUserIdAndDateRange(userId, startDate, endDate);
+        
+        // Convert to DTOs
+        return tasks.stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+    }
+    
+    private TaskResponseDTO convertToDTO(TaskEntity task) {
+        TaskResponseDTO dto = new TaskResponseDTO();
+        dto.setTaskId(task.getTaskId());
+        dto.setTopic(task.getTopic());
+        dto.setDescription(task.getDescription());
+        
+        // Set status info
+        if (task.getStatus() != null) {
+            TaskResponseDTO.StatusInfo statusInfo = new TaskResponseDTO.StatusInfo();
+            statusInfo.setStatusId(task.getStatus().getStatusId());
+            statusInfo.setStatusName(task.getStatus().getStatusName());
+            dto.setStatus(statusInfo);
+        }
+        
+        // Set category info
+        if (task.getCategory() != null) {
+            TaskResponseDTO.CategoryInfo categoryInfo = new TaskResponseDTO.CategoryInfo();
+            categoryInfo.setCategoryId(task.getCategory().getCategoryId());
+            categoryInfo.setCategoryName(task.getCategory().getCategoryName());
+            dto.setCategory(categoryInfo);
+        }
+        
+        dto.setCreateTime(task.getCreateTime());
+        dto.setStartTime(task.getStartTime());
+        dto.setEndTime(task.getEndTime());
+        dto.setIsRemainder(task.getIsRemainder());
+        dto.setRemainderTime(task.getRemainderTime());
+        dto.setLastUpdateTime(task.getLastUpdateTime());
+        
+        return dto;
     }
 }
