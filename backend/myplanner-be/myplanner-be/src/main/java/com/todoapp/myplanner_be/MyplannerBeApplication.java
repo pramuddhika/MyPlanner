@@ -1,13 +1,13 @@
-package com.todoApp.myPlanner;
+package com.todoapp.myplanner_be;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MyPlannerApplication {
+public class MyplannerBeApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MyPlannerApplication.class, args);
+		SpringApplication.run(MyplannerBeApplication.class, args);
 	}
 
 }

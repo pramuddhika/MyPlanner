@@ -1,12 +1,12 @@
 CREATE SCHEMA `myplanner` ;
 
 CREATE TABLE `myplanner`.`user` (
-  `userId` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`userId`),
-  UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) VISIBLE);
+  userId INT NOT NULL AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  email VARCHAR(45) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  PRIMARY KEY (userId)
+  );
   
 CREATE TABLE `myplanner`.`categoryList` (
   categoryId INT NOT NULL AUTO_INCREMENT,
@@ -40,3 +40,9 @@ CREATE TABLE `myplanner`.`status` (
      FOREIGN KEY (categoryId) REFERENCES categoryList(categoryId),
      FOREIGN KEY (userId) REFERENCES user(userId)
   );
+
+-- Sample Data
+INSERT INTO `myplanner`.`status` (`statusId`, `statusName`) VALUES ('1', 'To Do');
+INSERT INTO `myplanner`.`status` (`statusId`, `statusName`) VALUES ('2', 'In Progress');
+INSERT INTO `myplanner`.`status` (`statusId`, `statusName`) VALUES ('3', 'On Hold');
+INSERT INTO `myplanner`.`status` (`statusId`, `statusName`) VALUES ('4', 'Done');
