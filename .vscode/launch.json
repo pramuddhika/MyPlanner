@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MyPlannerApplication<myPlanner>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.todoApp.myPlanner.MyPlannerApplication",
+            "projectName": "myPlanner",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MyplannerBeApplication<myplanner-be>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.todoapp.myplanner_be.MyplannerBeApplication",
+            "projectName": "myplanner-be",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
