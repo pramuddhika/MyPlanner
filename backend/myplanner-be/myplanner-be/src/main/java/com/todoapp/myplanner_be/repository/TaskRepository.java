@@ -1,0 +1,18 @@
+package com.todoapp.myplanner_be.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.todoapp.myplanner_be.entity.TaskEntity;
+
+import java.util.List;
+
+@Repository
+public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
+    
+    List<TaskEntity> findByUser_UserId(Integer userId);
+    
+    List<TaskEntity> findByUser_UserIdAndStatus_StatusId(Integer userId, Byte statusId);
+    
+    List<TaskEntity> findByUser_UserIdAndCategory_CategoryId(Integer userId, Integer categoryId);
+}
