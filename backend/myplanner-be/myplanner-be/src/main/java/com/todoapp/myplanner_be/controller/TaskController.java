@@ -3,6 +3,8 @@ package com.todoapp.myplanner_be.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,6 +70,27 @@ public class TaskController {
         
         taskService.updateTask(updateTaskDTO, userId);
         ApiResponse<Object> response = ApiResponse.success("Task updated successfully");
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(
+        summary = "Delete a task",
+        description = "Deletes a task for the authenticated user. Task must belong to the user. Requires valid JWT token."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/delete/{taskId}")
+    public ResponseEntity<ApiResponse<Object>> deleteTask(
+            @PathVariable Integer taskId,
+            HttpServletRequest request) {
+        
+        Integer userId = AuthUtil.getUserIdFromRequest(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Unauthorized", HttpStatus.UNAUTHORIZED.value()));
+        }
+        
+        taskService.deleteTask(taskId, userId);
+        ApiResponse<Object> response = ApiResponse.success("Task deleted successfully");
         return ResponseEntity.ok(response);
     }
 }

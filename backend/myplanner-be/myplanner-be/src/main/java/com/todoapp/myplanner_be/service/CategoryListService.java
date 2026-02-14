@@ -12,6 +12,7 @@ import com.todoapp.myplanner_be.entity.CategoryList;
 import com.todoapp.myplanner_be.entity.UserEntity;
 import com.todoapp.myplanner_be.exception.ResourceNotFoundException;
 import com.todoapp.myplanner_be.repository.CategoryListRepository;
+import com.todoapp.myplanner_be.repository.TaskRepository;
 import com.todoapp.myplanner_be.repository.UserRepository;
 
 @Service
@@ -22,6 +23,9 @@ public class CategoryListService {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private TaskRepository taskRepository;
     
     public CategoryList createCategory(CreateDTO createDTO, Integer userId) {
         // Validate category name
@@ -60,6 +64,25 @@ public class CategoryListService {
         return categories.stream()
             .map(category -> new CategoryResponseDTO(category.getCategoryId(), category.getCategoryName()))
             .collect(Collectors.toList());
+    }
+    
+    public void deleteCategory(Integer categoryId, Integer userId) {
+        // Check if category exists
+        CategoryList category = categoryListRepository.findById(categoryId)
+            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        
+        // Verify category belongs to the user
+        if (!category.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("Category does not belong to the user");
+        }
+        
+        // Check if any tasks are using this category
+        if (taskRepository.existsByCategory_CategoryId(categoryId)) {
+            throw new IllegalArgumentException("Cannot delete category. There are tasks associated with this category. Please delete those tasks first.");
+        }
+        
+        // Delete the category
+        categoryListRepository.delete(category);
     }
     
 }

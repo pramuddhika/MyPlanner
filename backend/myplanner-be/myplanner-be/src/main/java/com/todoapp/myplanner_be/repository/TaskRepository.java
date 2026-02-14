@@ -15,4 +15,6 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
     List<TaskEntity> findByUser_UserIdAndStatus_StatusId(Integer userId, Byte statusId);
     
     List<TaskEntity> findByUser_UserIdAndCategory_CategoryId(Integer userId, Integer categoryId);
+    
+    boolean existsByCategory_CategoryId(Integer categoryId);
 }

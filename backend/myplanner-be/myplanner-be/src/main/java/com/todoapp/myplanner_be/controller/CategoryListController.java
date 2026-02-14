@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +72,27 @@ public class CategoryListController {
             categories, 
             "Categories retrieved successfully"
         );
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(
+        summary = "Delete a category",
+        description = "Deletes a category for the authenticated user. Category must belong to the user and must not have any associated tasks. Requires valid JWT token."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/delete/{categoryId}")
+    public ResponseEntity<ApiResponse<Object>> deleteCategory(
+            @PathVariable Integer categoryId,
+            HttpServletRequest request) {
+        
+        Integer userId = AuthUtil.getUserIdFromRequest(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Unauthorized", HttpStatus.UNAUTHORIZED.value()));
+        }
+        
+        categoryListService.deleteCategory(categoryId, userId);
+        ApiResponse<Object> response = ApiResponse.success("Category deleted successfully");
         return ResponseEntity.ok(response);
     }
     

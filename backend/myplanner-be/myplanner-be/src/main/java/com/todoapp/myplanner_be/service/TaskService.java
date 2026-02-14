@@ -146,4 +146,18 @@ public class TaskService {
         // Save and return
         return taskRepository.save(task);
     }
+    
+    public void deleteTask(Integer taskId, Integer userId) {
+        // Find the task
+        TaskEntity task = taskRepository.findById(taskId)
+            .orElseThrow(() -> new ResourceNotFoundException("Task not found with id: " + taskId));
+        
+        // Verify that the task belongs to the user
+        if (!task.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("Task does not belong to the user");
+        }
+        
+        // Delete the task
+        taskRepository.delete(task);
+    }
 }
