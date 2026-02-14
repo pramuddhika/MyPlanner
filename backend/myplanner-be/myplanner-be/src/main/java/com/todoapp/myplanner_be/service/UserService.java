@@ -13,24 +13,33 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     
-    public boolean createUser(UserCreationDTO userDTO) {
-        try {
-            // Check if email already exists
-            if (userRepository.existsByEmail(userDTO.getEmail())) {
-                return false;
-            }
-            
-            // Create new user entity
-            UserEntity user = new UserEntity();
-            user.setName(userDTO.getName());
-            user.setEmail(userDTO.getEmail());
-            user.setPassword(userDTO.getPassword()); // Note: In production, hash the password!
-            
-            // Save user
-            userRepository.save(user);
-            return true;
-        } catch (Exception e) {
-            return false;
+    public UserCreationDTO createUser(UserCreationDTO userDTO) {
+        // Check if email already exists
+        if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
         }
+        
+        // Validate input
+        if (userDTO.getEmail() == null || userDTO.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+        if (userDTO.getName() == null || userDTO.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Name is required");
+        }
+        if (userDTO.getPassword() == null || userDTO.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+        
+        // Create new user entity
+        UserEntity user = new UserEntity();
+        user.setName(userDTO.getName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(userDTO.getPassword());
+        
+        // Save user
+        userRepository.save(user);
+        
+        // Return the created user DTO
+        return new UserCreationDTO(userDTO.getEmail(), userDTO.getName(), null);
     }
 }
