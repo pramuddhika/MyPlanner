@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.todoapp.myplanner_be.dto.task.CreateTaskDTO;
+import com.todoapp.myplanner_be.dto.task.UpdateTaskDTO;
 import com.todoapp.myplanner_be.entity.CategoryList;
 import com.todoapp.myplanner_be.entity.StatusEntity;
 import com.todoapp.myplanner_be.entity.TaskEntity;
@@ -78,6 +79,69 @@ public class TaskService {
         LocalDateTime now = LocalDateTime.now();
         task.setCreateTime(now);
         task.setLastUpdateTime(now);
+        
+        // Save and return
+        return taskRepository.save(task);
+    }
+    
+    public TaskEntity updateTask(UpdateTaskDTO updateTaskDTO, Integer userId) {
+        // Validate task ID
+        if (updateTaskDTO.getTaskId() == null) {
+            throw new IllegalArgumentException("Task ID is required");
+        }
+        
+        // Find existing task
+        TaskEntity task = taskRepository.findById(updateTaskDTO.getTaskId())
+            .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+        
+        // Verify task belongs to the user (from token)
+        if (!task.getUser().getUserId().equals(userId)) {
+            throw new IllegalArgumentException("Task does not belong to the user");
+        }
+        
+        // Validate topic
+        if (updateTaskDTO.getTopic() == null || updateTaskDTO.getTopic().trim().isEmpty()) {
+            throw new IllegalArgumentException("Task topic is required");
+        }
+        
+        // Check if status exists
+        StatusEntity status = statusRepository.findById(updateTaskDTO.getStatusId())
+            .orElseThrow(() -> new ResourceNotFoundException("Status not found"));
+        
+        // Check if category exists (if provided)
+        CategoryList category = null;
+        if (updateTaskDTO.getCategoryId() != null) {
+            category = categoryListRepository.findById(updateTaskDTO.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            
+            // Verify category belongs to the user
+            if (!category.getUser().getUserId().equals(userId)) {
+                throw new IllegalArgumentException("Category does not belong to the user");
+            }
+        }
+        
+        // Validate reminder logic - if isRemainder is false/null, set remainderTime to null
+        LocalDateTime remainderTime = null;
+        if (Boolean.TRUE.equals(updateTaskDTO.getIsRemainder())) {
+            if (updateTaskDTO.getRemainderTime() == null) {
+                throw new IllegalArgumentException("Reminder time is required when reminder is enabled");
+            }
+            remainderTime = updateTaskDTO.getRemainderTime();
+        }
+        
+        // Update task fields
+        task.setTopic(updateTaskDTO.getTopic().trim());
+        task.setDescription(updateTaskDTO.getDescription() != null ? updateTaskDTO.getDescription().trim() : null);
+        task.setStatus(status);
+        task.setCategory(category);
+        task.setStartTime(updateTaskDTO.getStartTime());
+        task.setEndTime(updateTaskDTO.getEndTime());
+        task.setIsRemainder(updateTaskDTO.getIsRemainder());
+        task.setRemainderTime(remainderTime);
+        
+        // createTime is NOT updated (remains the same)
+        // Only update lastUpdateTime
+        task.setLastUpdateTime(LocalDateTime.now());
         
         // Save and return
         return taskRepository.save(task);

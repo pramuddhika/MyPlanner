@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todoapp.myplanner_be.dto.task.CreateTaskDTO;
+import com.todoapp.myplanner_be.dto.task.UpdateTaskDTO;
 import com.todoapp.myplanner_be.response.ApiResponse;
 import com.todoapp.myplanner_be.service.TaskService;
 import com.todoapp.myplanner_be.util.AuthUtil;
@@ -46,5 +48,26 @@ public class TaskController {
         taskService.createTask(createTaskDTO, userId);
         ApiResponse<Object> response = ApiResponse.success("Task created successfully");
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+    
+    @Operation(
+        summary = "Update an existing task",
+        description = "Updates an existing task for the authenticated user. Task must belong to the user. CreateTime cannot be modified. If isRemainder is false, remainderTime will be set to null. Requires valid JWT token."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse<Object>> updateTask(
+            @Valid @RequestBody UpdateTaskDTO updateTaskDTO,
+            HttpServletRequest request) {
+        
+        Integer userId = AuthUtil.getUserIdFromRequest(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Unauthorized", HttpStatus.UNAUTHORIZED.value()));
+        }
+        
+        taskService.updateTask(updateTaskDTO, userId);
+        ApiResponse<Object> response = ApiResponse.success("Task updated successfully");
+        return ResponseEntity.ok(response);
     }
 }
