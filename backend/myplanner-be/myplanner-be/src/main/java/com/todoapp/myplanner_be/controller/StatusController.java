@@ -13,9 +13,6 @@ import com.todoapp.myplanner_be.response.ApiResponse;
 import com.todoapp.myplanner_be.service.StatusService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Status Management", description = "APIs for managing task statuses (e.g., To Do, In Progress, Completed)")
@@ -29,13 +26,6 @@ public class StatusController {
     @Operation(
         summary = "Get all task statuses"
     )
-    @ApiResponses(value = {
-        @io.swagger.v3.oas.annotations.responses.ApiResponse(
-            responseCode = "200",
-            description = "Successfully retrieved all statuses",
-            content = @Content(schema = @Schema(implementation = ApiResponse.class))
-        )
-    })
     @GetMapping("/all")
     public ResponseEntity<ApiResponse<List<StatusDTO>>> getAllStatuses() {
         List<StatusDTO> statuses = statusService.getAllStatuses();

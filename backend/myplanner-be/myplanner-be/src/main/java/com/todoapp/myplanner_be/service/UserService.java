@@ -1,18 +1,27 @@
 package com.todoapp.myplanner_be.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.todoapp.myplanner_be.dto.user.AuthResponseDTO;
 import com.todoapp.myplanner_be.dto.user.LogInDTO;
 import com.todoapp.myplanner_be.dto.user.UserCreationDTO;
 import com.todoapp.myplanner_be.entity.UserEntity;
 import com.todoapp.myplanner_be.repository.UserRepository;
+import com.todoapp.myplanner_be.security.JwtUtil;
 
 @Service
 public class UserService {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private JwtUtil jwtUtil;
     
     public void createUser(UserCreationDTO userDTO) {
         // Check if email already exists
@@ -35,13 +44,14 @@ public class UserService {
         UserEntity user = new UserEntity();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword()); // Note: In production, hash the password!
+        // Encrypt password before saving
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         
         // Save user
         userRepository.save(user);
     }
     
-    public void loginUser(LogInDTO loginDTO) {
+    public AuthResponseDTO loginUser(LogInDTO loginDTO) {
         // Validate input
         if (loginDTO.getEmail() == null || loginDTO.getEmail().trim().isEmpty()) {
             throw new IllegalArgumentException("Email is required");
@@ -54,9 +64,15 @@ public class UserService {
         UserEntity user = userRepository.findByEmail(loginDTO.getEmail())
             .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
         
-        // Check password (Note: In production, compare hashed passwords!)
-        if (!user.getPassword().equals(loginDTO.getPassword())) {
+        // Verify encrypted password
+        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password");
         }
+        
+        // Generate JWT token
+        String token = jwtUtil.generateToken(user.getEmail(), user.getUserId());
+        
+        // Return authentication response with token and user details
+        return new AuthResponseDTO(token, user.getUserId(), user.getEmail(), user.getName());
     }
 }
