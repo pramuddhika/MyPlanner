@@ -27,7 +27,7 @@ CREATE TABLE `myplanner`.`status` (
      topic VARCHAR(30) NOT NULL,
      description VARCHAR(100),
      statusId TINYINT NOT NULL,
-     categoryId INT NOT NULL,
+     categoryId INT,
      createTime DATETIME NOT NULL,
      startTime DATETIME,
      endTime DATETIME,
