@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import com.todoapp.myplanner_be.dto.user.ChangeNameDTO;
 import com.todoapp.myplanner_be.dto.user.ChangePasswordDTO;
 import com.todoapp.myplanner_be.dto.user.LogInDTO;
 import com.todoapp.myplanner_be.dto.user.UserCreationDTO;
+import com.todoapp.myplanner_be.dto.user.UserProfileDTO;
 import com.todoapp.myplanner_be.response.ApiResponse;
 import com.todoapp.myplanner_be.service.UserService;
 import com.todoapp.myplanner_be.util.AuthUtil;
@@ -56,6 +58,24 @@ public class UserController {
             authResponse,
             "Login successful"
         );
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(
+        summary = "Get user profile",
+        description = "Retrieves the authenticated user's profile information (name and email). Requires valid JWT token."
+    )
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/profile")
+    public ResponseEntity<ApiResponse<UserProfileDTO>> getUserProfile(HttpServletRequest request) {
+        Integer userId = AuthUtil.getUserIdFromRequest(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("Unauthorized", HttpStatus.UNAUTHORIZED.value()));
+        }
+        
+        UserProfileDTO profile = userService.getUserProfile(userId);
+        ApiResponse<UserProfileDTO> response = ApiResponse.success(profile, "User profile retrieved successfully");
         return ResponseEntity.ok(response);
     }
     

@@ -9,6 +9,7 @@ import com.todoapp.myplanner_be.dto.user.ChangeNameDTO;
 import com.todoapp.myplanner_be.dto.user.ChangePasswordDTO;
 import com.todoapp.myplanner_be.dto.user.LogInDTO;
 import com.todoapp.myplanner_be.dto.user.UserCreationDTO;
+import com.todoapp.myplanner_be.dto.user.UserProfileDTO;
 import com.todoapp.myplanner_be.entity.UserEntity;
 import com.todoapp.myplanner_be.exception.ResourceNotFoundException;
 import com.todoapp.myplanner_be.repository.UserRepository;
@@ -121,5 +122,14 @@ public class UserService {
         // Update password with encryption
         user.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
         userRepository.save(user);
+    }
+    
+    public UserProfileDTO getUserProfile(Integer userId) {
+        // Find user by ID
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        
+        // Return user profile with name and email
+        return new UserProfileDTO(user.getName(), user.getEmail());
     }
 }
