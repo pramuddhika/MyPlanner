@@ -17,9 +17,9 @@ public class StatusService {
     private StatusRepository statusRepository;
 
     public List<StatusDTO> getAllStatuses() {
-        List<StatusEntity> statusEntities = statusRepository.findAll();
-        return statusEntities.stream()
-                .map(status -> new StatusDTO(status.getStatusId(), status.getStatusName()))
-                .collect(Collectors.toList());
-    }
+    List<StatusEntity> statusEntities = statusRepository.findAll();
+    return statusEntities.stream()
+        .map(status -> new StatusDTO(status.getStatusId(), status.getStatusName()))
+        .collect(Collectors.toList());
+}
 }
