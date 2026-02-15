@@ -1,11 +1,43 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import ProtectedRoute from '@/components/layout/ProtectedRoute';
+import DashboardLayout from '@/components/layout/DashboardLayout';
+import LoginPage from '@/pages/LoginPage';
+import SignUpPage from '@/pages/SignUpPage';
+import DashboardPage from '@/pages/DashboardPage';
+import ProfilePage from '@/pages/ProfilePage';
+import ChangePasswordPage from '@/pages/ChangePasswordPage';
 
-function App() {
-
+export default function App() {
   return (
-    <>
-      <h1 className="text-primary text-3xl font-bold underline bg-sky-950">Vite + React</h1>
-    </>
-  )
-}
+    <TooltipProvider delayDuration={0}>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
 
-export default App
+          {/* Protected Routes */}
+          <Route
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/change-password" element={<ChangePasswordPage />} />
+          </Route>
+
+          {/* Default redirect */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
+
+      {/* Toast Notifications */}
+      <Toaster />
+    </TooltipProvider>
+  );
+}
