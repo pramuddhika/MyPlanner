@@ -22,10 +22,12 @@ public interface TaskRepository extends JpaRepository<TaskEntity, Integer> {
     boolean existsByCategory_CategoryId(Integer categoryId);
     
     @Query("SELECT t FROM TaskEntity t WHERE t.user.userId = :userId " +
-           "AND (t.startTime >= :startDate OR :startDate IS NULL) " +
-           "AND (t.endTime <= :endDate OR :endDate IS NULL)")
-    List<TaskEntity> findByUserIdAndDateRange(
+           "AND (:categoryId IS NULL OR t.category.categoryId = :categoryId) " +
+           "AND (:startDate IS NULL OR t.startTime >= :startDate) " +
+           "AND (:endDate IS NULL OR t.endTime <= :endDate)")
+    List<TaskEntity> findByUserIdAndDateRangeAndCategory(
         @Param("userId") Integer userId,
+        @Param("categoryId") Integer categoryId,
         @Param("startDate") LocalDateTime startDate,
         @Param("endDate") LocalDateTime endDate
     );
