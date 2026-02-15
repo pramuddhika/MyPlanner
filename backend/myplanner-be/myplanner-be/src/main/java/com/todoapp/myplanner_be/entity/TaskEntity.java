@@ -19,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TaskEntity {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -55,11 +55,14 @@ public class TaskEntity {
     @Column(name = "remainderTime")
     private LocalDateTime remainderTime;
 
+    @Column(name = "reminderSent")
+    private Boolean reminderSent;
+
     @Column(name = "lastUpdateTime", nullable = false)
     private LocalDateTime lastUpdateTime;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private UserEntity user;
-    
+
 }

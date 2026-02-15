@@ -102,13 +102,12 @@ public class TaskController {
     }
     
     @Operation(
-        summary = "Get tasks with filters",
-        description = "Fetches tasks for the authenticated user with optional filters: categoryId, startDate, endDate. If no filters are provided, returns today's tasks. Returns tasks with category and status information. Requires valid JWT token."
+        summary = "Get tasks by date range",
+        description = "Fetches all tasks for the authenticated user, optionally filtered by date range. Returns tasks with category and status information. Requires valid JWT token."
     )
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/get")
     public ResponseEntity<ApiResponse<List<TaskResponseDTO>>> getTasks(
-            @RequestParam(required = false) Integer categoryId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             HttpServletRequest request) {
@@ -119,7 +118,7 @@ public class TaskController {
                 .body(ApiResponse.error("Unauthorized", HttpStatus.UNAUTHORIZED.value()));
         }
         
-        List<TaskResponseDTO> tasks = taskService.getTasksByDateRange(userId, categoryId, startDate, endDate);
+        List<TaskResponseDTO> tasks = taskService.getTasksByDateRange(userId, startDate, endDate);
         ApiResponse<List<TaskResponseDTO>> response = ApiResponse.success(tasks, "Tasks fetched successfully");
         return ResponseEntity.ok(response);
     }

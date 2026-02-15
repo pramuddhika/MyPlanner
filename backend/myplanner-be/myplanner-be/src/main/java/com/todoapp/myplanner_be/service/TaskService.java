@@ -164,17 +164,9 @@ public class TaskService {
         taskRepository.delete(task);
     }
     
-    public List<TaskResponseDTO> getTasksByDateRange(Integer userId, Integer categoryId, LocalDateTime startDate, LocalDateTime endDate) {
-        // If all filters are empty, default to today's tasks
-        if (categoryId == null && startDate == null && endDate == null) {
-            LocalDateTime todayStart = LocalDateTime.now().toLocalDate().atStartOfDay();
-            LocalDateTime todayEnd = todayStart.plusDays(1).minusSeconds(1);
-            startDate = todayStart;
-            endDate = todayEnd;
-        }
-        
+    public List<TaskResponseDTO> getTasksByDateRange(Integer userId, LocalDateTime startDate, LocalDateTime endDate) {
         // Fetch tasks from repository
-        List<TaskEntity> tasks = taskRepository.findByUserIdAndDateRangeAndCategory(userId, categoryId, startDate, endDate);
+        List<TaskEntity> tasks = taskRepository.findByUserIdAndDateRange(userId, startDate, endDate);
         
         // Convert to DTOs
         return tasks.stream()

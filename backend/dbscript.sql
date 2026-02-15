@@ -41,6 +41,8 @@ CREATE TABLE `myplanner`.`status` (
      FOREIGN KEY (userId) REFERENCES user(userId)
   );
 
+  ALTER TABLE `myplanner`.`task` ADD COLUMN reminderSent BOOLEAN DEFAULT FALSE;
+
 -- Sample Data
 INSERT INTO `myplanner`.`status` (`statusId`, `statusName`) VALUES ('1', 'To Do');
 INSERT INTO `myplanner`.`status` (`statusId`, `statusName`) VALUES ('2', 'In Progress');
