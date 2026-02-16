@@ -22,25 +22,6 @@ export const useNotifications = () => {
         }
     }, []);
 
-    useEffect(() => {
-        // Connect to WebSocket when user is authenticated
-        if (userId && token) {
-            console.log('Connecting to WebSocket for user:', userId);
-            websocketService.connect(userId, token);
-
-            // Subscribe to notifications
-            const unsubscribe = websocketService.onNotification((notification: TaskNotification) => {
-                handleNotification(notification);
-            });
-
-            // Cleanup on unmount
-            return () => {
-                unsubscribe();
-                websocketService.disconnect();
-            };
-        }
-    }, [userId, token]);
-
     const handleNotification = (notification: TaskNotification) => {
         console.log('Handling notification:', notification);
 
@@ -61,6 +42,25 @@ export const useNotifications = () => {
             duration: 10000, // 10 seconds
         });
     };
+
+     useEffect(() => {
+        // Connect to WebSocket when user is authenticated
+        if (userId && token) {
+            console.log('Connecting to WebSocket for user:', userId);
+            websocketService.connect(userId, token);
+
+            // Subscribe to notifications
+            const unsubscribe = websocketService.onNotification((notification: TaskNotification) => {
+                handleNotification(notification);
+            });
+
+            // Cleanup on unmount
+            return () => {
+                unsubscribe();
+                websocketService.disconnect();
+            };
+        }
+    }, [userId, token]);
 
     return {
         isConnected: websocketService.getConnectionStatus(),

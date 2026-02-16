@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
     key: 'myplanner',
     storage,
-    whitelist: ['auth', 'ui'], // Only persist auth & UI state; tasks/categories/statuses re-fetched from API
+    whitelist: ['auth', 'ui'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

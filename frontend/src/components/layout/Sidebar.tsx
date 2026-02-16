@@ -59,7 +59,17 @@ export default function Sidebar() {
         if (location.pathname !== '/dashboard') navigate('/dashboard');
     };
 
+    const handleAllTasksClick = () => {
+        dispatch(setSelectedDate(null));
+        if (location.pathname !== '/dashboard') navigate('/dashboard');
+    };
+
     const userInitial = name ? name.charAt(0).toUpperCase() : '?';
+    const selectedDate = useSelector((state: RootState) => state.ui.selectedDate);
+    const today = dayjs().format('YYYY-MM-DD');
+    
+    const isTodayActive = location.pathname === '/dashboard' && selectedDate === today && !selectedCategoryId;
+    const isAllTasksActive = location.pathname === '/dashboard' && selectedDate === null && !selectedCategoryId;
 
     return (
         <div
@@ -101,7 +111,7 @@ export default function Sidebar() {
                                 className={cn(
                                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
                                     'text-slate-300 hover:text-white hover:bg-slate-800/60',
-                                    location.pathname === '/dashboard' && !selectedCategoryId && 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
+                                    isTodayActive && 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
                                 )}
                             >
                                 <CalendarDays className="w-4 h-4 shrink-0" />
@@ -119,13 +129,11 @@ export default function Sidebar() {
                     <Tooltip delayDuration={0}>
                         <TooltipTrigger asChild>
                             <button
-                                onClick={() => {
-                                    dispatch(setSelectedDate(null));
-                                    if (location.pathname !== '/dashboard') navigate('/dashboard');
-                                }}
+                                onClick={handleAllTasksClick}
                                 className={cn(
                                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
-                                    'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                                    'text-slate-300 hover:text-white hover:bg-slate-800/60',
+                                    isAllTasksActive && 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
                                 )}
                             >
                                 <ListTodo className="w-4 h-4 shrink-0" />
