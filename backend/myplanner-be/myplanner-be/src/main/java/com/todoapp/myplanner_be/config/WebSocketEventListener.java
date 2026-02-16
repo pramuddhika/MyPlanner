@@ -67,7 +67,7 @@ public class WebSocketEventListener {
                         "TASK_REMINDER",
                         task.getTaskId(),
                         task.getTopic(),
-                        "Your task \"" + task.getTopic() + "\" is due now!",
+                        "Reminder: Your task \"" + task.getTopic() + "\" is coming up!",
                         LocalDateTime.now());
 
                 messagingTemplate.convertAndSend(destination, notification);

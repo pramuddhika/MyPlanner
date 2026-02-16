@@ -55,7 +55,7 @@ public class ReminderSchedulerService {
                         "TASK_REMINDER",
                         task.getTaskId(),
                         task.getTopic(),
-                        "Your task \"" + task.getTopic() + "\" is due now!",
+                        "Reminder: Your task \"" + task.getTopic() + "\" is coming up!",
                         LocalDateTime.now());
 
                 // Send WebSocket notification to user's personal queue
