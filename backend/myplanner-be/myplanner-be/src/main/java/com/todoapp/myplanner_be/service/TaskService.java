@@ -141,7 +141,14 @@ public class TaskService {
         task.setEndTime(updateTaskDTO.getEndTime());
         task.setIsRemainder(updateTaskDTO.getIsRemainder());
         task.setRemainderTime(remainderTime);
-        
+
+        // Reset reminderSent when reminder settings change so the scheduler can re-send
+        if (Boolean.TRUE.equals(updateTaskDTO.getIsRemainder()) && remainderTime != null) {
+            task.setReminderSent(false);
+        } else {
+            task.setReminderSent(null);
+        }
+
         // createTime is NOT updated (remains the same)
         // Only update lastUpdateTime
         task.setLastUpdateTime(LocalDateTime.now());

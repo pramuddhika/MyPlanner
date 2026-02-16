@@ -46,13 +46,13 @@ public class CreateTaskDTO {
 
     @Schema(
         description = "Task start time",
-        example = "2026-02-15T09:00:00"
+        example = "2026-02-15T00:00:00"
     )
     private LocalDateTime startTime;
 
     @Schema(
         description = "Task end time",
-        example = "2026-02-15T17:00:00"
+        example = "2026-02-15T23:59:00"
     )
     private LocalDateTime endTime;
 

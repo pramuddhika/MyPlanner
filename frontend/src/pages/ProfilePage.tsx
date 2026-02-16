@@ -62,19 +62,19 @@ export default function ProfilePage() {
     });
 
     return (
-        <div className="h-full overflow-auto bg-slate-950">
+        <div className="h-full overflow-auto bg-gray-50 dark:bg-slate-950">
             <div className="max-w-2xl mx-auto py-10 px-6">
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-8">
                     <button
                         onClick={() => navigate('/dashboard')}
-                        className="text-slate-400 hover:text-white transition-colors"
+                        className="text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </button>
                     <div>
-                        <h1 className="text-2xl font-bold text-white">Profile</h1>
-                        <p className="text-sm text-slate-400">Manage your account information</p>
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Profile</h1>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">Manage your account information</p>
                     </div>
                 </div>
 
@@ -84,27 +84,27 @@ export default function ProfilePage() {
                         {profileName ? profileName.charAt(0).toUpperCase() : '?'}
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold text-white">{profileName}</h2>
-                        <p className="text-sm text-slate-400">{profileEmail}</p>
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{profileName}</h2>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">{profileEmail}</p>
                     </div>
                 </div>
 
                 {/* Personal Info Card */}
-                <div className="bg-slate-900/70 backdrop-blur-xl border border-slate-800/60 rounded-2xl p-6 mb-6">
+                <div className="bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-gray-200 dark:border-slate-800/60 rounded-2xl p-6 mb-6">
                     <div className="flex items-center gap-2 mb-5">
                         <User className="w-4 h-4 text-violet-400" />
-                        <h3 className="text-sm font-semibold text-white">Personal Information</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Personal Information</h3>
                     </div>
 
                     <form onSubmit={formik.handleSubmit} className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="name" className="text-slate-300 text-sm">
+                            <Label htmlFor="name" className="text-gray-700 dark:text-slate-300 text-sm">
                                 Full Name
                             </Label>
                             <Input
                                 id="name"
                                 {...formik.getFieldProps('name')}
-                                className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-violet-500 h-11"
+                                className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-violet-500 h-11"
                             />
                             {formik.touched.name && formik.errors.name && (
                                 <p className="text-red-400 text-xs">{formik.errors.name}</p>
@@ -112,16 +112,16 @@ export default function ProfilePage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-300 text-sm flex items-center gap-2">
-                                <Mail className="w-3.5 h-3.5 text-slate-500" />
+                            <Label className="text-gray-700 dark:text-slate-300 text-sm flex items-center gap-2">
+                                <Mail className="w-3.5 h-3.5 text-gray-400 dark:text-slate-500" />
                                 Email
                             </Label>
                             <Input
                                 value={profileEmail}
                                 disabled
-                                className="bg-slate-800/30 border-slate-700/30 text-slate-500 h-11 cursor-not-allowed"
+                                className="bg-gray-50 dark:bg-slate-800/30 border-gray-200 dark:border-slate-700/30 text-gray-400 dark:text-slate-500 h-11 cursor-not-allowed"
                             />
-                            <p className="text-xs text-slate-500">Email cannot be changed</p>
+                            <p className="text-xs text-gray-400 dark:text-slate-500">Email cannot be changed</p>
                         </div>
 
                         <div className="flex justify-end">
@@ -140,21 +140,21 @@ export default function ProfilePage() {
                     </form>
                 </div>
 
-                <Separator className="bg-slate-800/60 my-6" />
+                <Separator className="bg-gray-200 dark:bg-slate-800/60 my-6" />
 
                 {/* Security Card */}
-                <div className="bg-slate-900/70 backdrop-blur-xl border border-slate-800/60 rounded-2xl p-6">
+                <div className="bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-gray-200 dark:border-slate-800/60 rounded-2xl p-6">
                     <div className="flex items-center gap-2 mb-3">
                         <Shield className="w-4 h-4 text-violet-400" />
-                        <h3 className="text-sm font-semibold text-white">Security</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Security</h3>
                     </div>
-                    <p className="text-sm text-slate-400 mb-4">
+                    <p className="text-sm text-gray-500 dark:text-slate-400 mb-4">
                         Keep your account secure by updating your password regularly.
                     </p>
                     <Button
                         variant="outline"
                         onClick={() => navigate('/change-password')}
-                        className="border-slate-600 bg-slate-800 text-white"
+                        className="border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white"
                     >
                         Change Password
                     </Button>

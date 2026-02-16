@@ -52,13 +52,13 @@ export function DeleteTaskDialog({ open, onOpenChange, task, onSuccess }: Props)
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-slate-900 border-slate-800 text-white sm:max-w-md">
+            <DialogContent className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 text-gray-900 dark:text-white sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-white">
+                    <DialogTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                         <AlertTriangle className="w-5 h-5 text-red-400" />
                         Delete Task
                     </DialogTitle>
-                    <DialogDescription className="text-slate-400">
+                    <DialogDescription className="text-gray-500 dark:text-slate-400">
                         Are you sure you want to delete &ldquo;{task.topic}&rdquo;? This action cannot be
                         undone.
                     </DialogDescription>
@@ -68,7 +68,7 @@ export function DeleteTaskDialog({ open, onOpenChange, task, onSuccess }: Props)
                     <Button
                         variant="ghost"
                         onClick={() => onOpenChange(false)}
-                        className="border-slate-600 bg-slate-800 text-white"
+                        className="border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white"
                     >
                         Cancel
                     </Button>

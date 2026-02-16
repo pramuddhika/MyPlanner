@@ -45,10 +45,10 @@ export default function LoginPage() {
     });
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-violet-950 p-4">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-violet-950 p-4">
             {/* Ambient glow */}
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl" />
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-300/20 dark:bg-violet-500/10 rounded-full blur-3xl" />
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-300/20 dark:bg-indigo-500/10 rounded-full blur-3xl" />
 
             <div className="relative w-full max-w-md">
                 {/* Logo */}
@@ -57,22 +57,22 @@ export default function LoginPage() {
                         <div className="w-10 h-10 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/25">
                             <CheckSquare className="w-5 h-5 text-white" />
                         </div>
-                        <h1 className="text-2xl font-bold text-white tracking-tight">MyPlanner</h1>
+                        <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">MyPlanner</h1>
                     </div>
-                    <p className="text-slate-400 text-sm">Plan your day, own your time</p>
+                    <p className="text-gray-500 dark:text-slate-400 text-sm">Plan your day, own your time</p>
                 </div>
 
                 {/* Card */}
-                <div className="bg-slate-900/70 backdrop-blur-xl border border-slate-800/60 rounded-2xl p-8 shadow-2xl shadow-black/20">
+                <div className="bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-gray-200 dark:border-slate-800/60 rounded-2xl p-8 shadow-2xl shadow-black/5 dark:shadow-black/20">
                     <div className="mb-6">
-                        <h2 className="text-xl font-semibold text-white">Welcome back</h2>
-                        <p className="text-slate-400 text-sm mt-1">Sign in to your account</p>
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Welcome back</h2>
+                        <p className="text-gray-500 dark:text-slate-400 text-sm mt-1">Sign in to your account</p>
                     </div>
 
                     <form onSubmit={formik.handleSubmit} className="space-y-5">
                         {/* Email */}
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-slate-300 text-sm font-medium">
+                            <Label htmlFor="email" className="text-gray-700 dark:text-slate-300 text-sm font-medium">
                                 Email
                             </Label>
                             <Input
@@ -80,7 +80,7 @@ export default function LoginPage() {
                                 type="email"
                                 placeholder="you@example.com"
                                 {...formik.getFieldProps('email')}
-                                className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-violet-500/20 h-11"
+                                className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-violet-500 focus:ring-violet-500/20 h-11"
                             />
                             {formik.touched.email && formik.errors.email && (
                                 <p className="text-red-400 text-xs mt-1">{formik.errors.email}</p>
@@ -89,7 +89,7 @@ export default function LoginPage() {
 
                         {/* Password */}
                         <div className="space-y-2">
-                            <Label htmlFor="password" className="text-slate-300 text-sm font-medium">
+                            <Label htmlFor="password" className="text-gray-700 dark:text-slate-300 text-sm font-medium">
                                 Password
                             </Label>
                             <div className="relative">
@@ -98,12 +98,12 @@ export default function LoginPage() {
                                     type={showPassword ? 'text' : 'password'}
                                     placeholder="••••••••"
                                     {...formik.getFieldProps('password')}
-                                    className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-violet-500 focus:ring-violet-500/20 h-11 pr-10"
+                                    className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-violet-500 focus:ring-violet-500/20 h-11 pr-10"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-400 hover:text-gray-600 dark:hover:text-slate-300 transition-colors"
                                 >
                                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                 </button>
@@ -129,7 +129,7 @@ export default function LoginPage() {
 
                     {/* Footer Links */}
                     <div className="mt-6 text-center space-y-3">
-                        <p className="text-slate-400 text-sm">
+                        <p className="text-gray-500 dark:text-slate-400 text-sm">
                             Don&apos;t have an account?{' '}
                             <Link
                                 to="/signup"

@@ -4,6 +4,7 @@ import type { RootState } from '@/store';
 import { websocketService } from '@/services/websocketService';
 import type { TaskNotification } from '@/services/websocketService';
 import toast from 'react-hot-toast';
+import { TaskReminderToast } from '@/components/notifications/TaskReminderToast';
 
 export const useNotifications = () => {
     const { userId, token } = useSelector((state: RootState) => state.auth);
@@ -24,12 +25,11 @@ export const useNotifications = () => {
      useEffect(() => {
         // Connect to WebSocket when user is authenticated
         if (userId && token) {
-            console.log('Connecting to WebSocket for user:', userId);
             websocketService.connect(userId, token);
 
             // Subscribe to notifications
             const unsubscribe = websocketService.onNotification((notification: TaskNotification) => {
-                console.log('Handling notification:', notification);
+                console.log(`🔔 [Notification] Task topic: "${notification.topic}" (taskId: ${notification.taskId}, time: ${notification.timestamp})`);
 
                 // Show browser notification
                 if ('Notification' in window && Notification.permission === 'granted') {
@@ -40,15 +40,19 @@ export const useNotifications = () => {
                     });
                 }
 
-                // Show toast notification
-                toast('🔔 ' + notification.message, {
-                    duration: 10000,
-                    style: {
-                        background: '#1e293b',
-                        color: '#fff',
-                        border: '1px solid #334155',
-                    },
-                });
+                // Show custom toast notification
+                toast.custom(
+                    (t) => TaskReminderToast({
+                        t,
+                        topic: notification.topic,
+                        message: notification.message,
+                        timestamp: notification.timestamp,
+                    }),
+                    {
+                        duration: 15000,
+                        id: `task-reminder-${notification.taskId}`,
+                    }
+                );
             });
 
             // Cleanup on unmount

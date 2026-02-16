@@ -56,8 +56,8 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
             description: '',
             statusId: statuses.length > 0 ? statuses[0].statusId : 1,
             categoryId: null as number | null,
-            startTime: defaultDate ? `${defaultDate}T09:00` : '',
-            endTime: defaultDate ? `${defaultDate}T10:00` : '',
+            startTime: defaultDate ? `${defaultDate}T00:00` : '',
+            endTime: defaultDate ? `${defaultDate}T23:59` : '',
             isRemainder: false,
             remainderTime: '',
         },
@@ -104,9 +104,9 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-slate-900 border-slate-800 text-white sm:max-w-lg max-h-[90vh] overflow-y-auto">
+            <DialogContent className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 text-gray-900 dark:text-white sm:max-w-lg max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-white">
+                    <DialogTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                         <ListPlus className="w-5 h-5 text-violet-400" />
                         New Task
                     </DialogTitle>
@@ -115,11 +115,11 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
                 <form onSubmit={formik.handleSubmit} className="space-y-4 mt-2">
                     {/* Topic */}
                     <div className="space-y-2">
-                        <Label className="text-slate-300 text-sm">Topic *</Label>
+                        <Label className="text-gray-700 dark:text-slate-300 text-sm">Topic *</Label>
                         <Input
                             placeholder="What needs to be done?"
                             {...formik.getFieldProps('topic')}
-                            className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-violet-500 h-10"
+                            className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-violet-500 h-10"
                         />
                         {formik.touched.topic && formik.errors.topic && (
                             <p className="text-red-400 text-xs">{formik.errors.topic}</p>
@@ -128,11 +128,11 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
 
                     {/* Description */}
                     <div className="space-y-2">
-                        <Label className="text-slate-300 text-sm">Description</Label>
+                        <Label className="text-gray-700 dark:text-slate-300 text-sm">Description</Label>
                         <Input
                             placeholder="Optional details..."
                             {...formik.getFieldProps('description')}
-                            className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-violet-500 h-10"
+                            className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-violet-500 h-10"
                         />
                         {formik.touched.description && formik.errors.description && (
                             <p className="text-red-400 text-xs">{formik.errors.description}</p>
@@ -142,17 +142,17 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
                     {/* Status & Category */}
                     <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                            <Label className="text-slate-300 text-sm">Status *</Label>
+                            <Label className="text-gray-700 dark:text-slate-300 text-sm">Status *</Label>
                             <Select
                                 value={formik.values.statusId.toString()}
                                 onValueChange={(val) => formik.setFieldValue('statusId', Number(val))}
                             >
-                                <SelectTrigger className="bg-slate-800/50 border-slate-700/50 text-slate-300 h-10">
+                                <SelectTrigger className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-700 dark:text-slate-300 h-10">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-slate-800 border-slate-700">
+                                <SelectContent className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
                                     {statuses.map((s) => (
-                                        <SelectItem key={s.statusId} value={s.statusId.toString()} className="text-slate-300">
+                                        <SelectItem key={s.statusId} value={s.statusId.toString()} className="text-gray-700 dark:text-slate-300">
                                             {s.statusName}
                                         </SelectItem>
                                     ))}
@@ -161,20 +161,20 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
                         </div>
 
                         <div className="space-y-2">
-                            <Label className="text-slate-300 text-sm">Category</Label>
+                            <Label className="text-gray-700 dark:text-slate-300 text-sm">Category</Label>
                             <Select
                                 value={formik.values.categoryId?.toString() || 'none'}
                                 onValueChange={(val) =>
                                     formik.setFieldValue('categoryId', val === 'none' ? null : Number(val))
                                 }
                             >
-                                <SelectTrigger className="bg-slate-800/50 border-slate-700/50 text-slate-300 h-10">
+                                <SelectTrigger className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-700 dark:text-slate-300 h-10">
                                     <SelectValue placeholder="None" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-slate-800 border-slate-700">
-                                    <SelectItem value="none" className="text-slate-300">None</SelectItem>
+                                <SelectContent className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+                                    <SelectItem value="none" className="text-gray-700 dark:text-slate-300">None</SelectItem>
                                     {categories.map((c) => (
-                                        <SelectItem key={c.categoryId} value={c.categoryId.toString()} className="text-slate-300">
+                                        <SelectItem key={c.categoryId} value={c.categoryId.toString()} className="text-gray-700 dark:text-slate-300">
                                             {c.categoryName}
                                         </SelectItem>
                                     ))}
@@ -186,19 +186,19 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
                     {/* Start & End Time */}
                     <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
-                            <Label className="text-slate-300 text-sm">Start Time</Label>
+                            <Label className="text-gray-700 dark:text-slate-300 text-sm">Start Time</Label>
                             <Input
                                 type="datetime-local"
                                 {...formik.getFieldProps('startTime')}
-                                className="bg-slate-800/50 border-slate-700/50 text-slate-300 focus:border-violet-500 h-10 [color-scheme:dark]"
+                                className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-700 dark:text-slate-300 focus:border-violet-500 h-10 dark:[color-scheme:dark]"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label className="text-slate-300 text-sm">End Time</Label>
+                            <Label className="text-gray-700 dark:text-slate-300 text-sm">End Time</Label>
                             <Input
                                 type="datetime-local"
                                 {...formik.getFieldProps('endTime')}
-                                className="bg-slate-800/50 border-slate-700/50 text-slate-300 focus:border-violet-500 h-10 [color-scheme:dark]"
+                                className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-700 dark:text-slate-300 focus:border-violet-500 h-10 dark:[color-scheme:dark]"
                             />
                         </div>
                     </div>
@@ -210,18 +210,18 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
                                 type="checkbox"
                                 checked={formik.values.isRemainder}
                                 onChange={(e) => formik.setFieldValue('isRemainder', e.target.checked)}
-                                className="rounded border-slate-600 bg-slate-800 text-violet-500 focus:ring-violet-500/20"
+                                className="rounded border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-violet-500 focus:ring-violet-500/20"
                             />
-                            <span className="text-sm text-slate-300">Set Reminder</span>
+                            <span className="text-sm text-gray-700 dark:text-slate-300">Set Reminder</span>
                         </label>
 
                         {formik.values.isRemainder && (
                             <div className="space-y-2">
-                                <Label className="text-slate-300 text-sm">Reminder Time</Label>
+                                <Label className="text-gray-700 dark:text-slate-300 text-sm">Reminder Time</Label>
                                 <Input
                                     type="datetime-local"
                                     {...formik.getFieldProps('remainderTime')}
-                                    className="bg-slate-800/50 border-slate-700/50 text-slate-300 focus:border-violet-500 h-10 [color-scheme:dark]"
+                                    className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-700 dark:text-slate-300 focus:border-violet-500 h-10 dark:[color-scheme:dark]"
                                 />
                             </div>
                         )}
@@ -233,7 +233,7 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
                             type="button"
                             variant="ghost"
                             onClick={() => onOpenChange(false)}
-                            className="border-slate-600 bg-slate-800 text-white"
+                            className="border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white"
                         >
                             Cancel
                         </Button>

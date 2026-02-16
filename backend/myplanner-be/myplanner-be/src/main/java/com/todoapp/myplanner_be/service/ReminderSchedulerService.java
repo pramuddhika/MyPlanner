@@ -28,7 +28,7 @@ public class ReminderSchedulerService {
     /**
      * Runs every 1 minute to check for due task reminders
      */
-    @Scheduled(fixedRate = 60000) // 60000 ms = 1 minute
+    @Scheduled(fixedRate = 30000) // 30000 ms = 30 seconds
     @Transactional
     public void checkAndSendReminders() {
         logger.info("Checking for due task reminders...");
@@ -55,7 +55,7 @@ public class ReminderSchedulerService {
                         "TASK_REMINDER",
                         task.getTaskId(),
                         task.getTopic(),
-                        "Your task \"" + task.getTopic() + "\" is due now!",
+                        "Reminder: Your task \"" + task.getTopic() + "\" is coming up!",
                         LocalDateTime.now());
 
                 // Send WebSocket notification to user's personal queue

@@ -17,22 +17,15 @@ class WebSocketService {
     private isConnected = false;
 
     connect(userId: number, token: string) {
-        if (this.isConnected) {
-            console.log('WebSocket already connected');
-            return;
-        }
 
         // Create SockJS instance
         const socket = new SockJS('http://localhost:8080/ws');
 
         // Create STOMP client
         this.client = new Client({
-            webSocketFactory: () => socket as any,
+            webSocketFactory: () => socket as unknown as WebSocket,
             connectHeaders: {
                 Authorization: `Bearer ${token}`,
-            },
-            debug: (str) => {
-                console.log('STOMP Debug:', str);
             },
             reconnectDelay: 5000,
             heartbeatIncoming: 4000,
@@ -41,14 +34,12 @@ class WebSocketService {
 
         // On successful connection
         this.client.onConnect = () => {
-            console.log('WebSocket connected');
             this.isConnected = true;
 
             // Subscribe to user-specific notification queue
             this.client?.subscribe(`/queue/user/${userId}/notifications`, (message) => {
                 try {
                     const notification: TaskNotification = JSON.parse(message.body);
-                    console.log('Received notification:', notification);
 
                     // Notify all registered callbacks
                     this.callbacks.forEach((callback) => callback(notification));
@@ -67,7 +58,6 @@ class WebSocketService {
 
         // On WebSocket close
         this.client.onWebSocketClose = () => {
-            console.log('WebSocket connection closed');
             this.isConnected = false;
         };
 
@@ -80,7 +70,6 @@ class WebSocketService {
             this.client.deactivate();
             this.client = null;
             this.isConnected = false;
-            console.log('WebSocket disconnected');
         }
     }
 
