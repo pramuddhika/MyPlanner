@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { ArrowLeft, Loader2, Lock, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import authService from '@/services/authService';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const passwordSchema = Yup.object().shape({
     currentPassword: Yup.string().required('Current password is required'),
@@ -24,6 +24,13 @@ export default function ChangePasswordPage() {
     const [showCurrent, setShowCurrent] = useState(false);
     const [showNew, setShowNew] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+
+    useEffect(() => {
+        document.title = 'Change Password | My Planner';
+        return () => {
+            document.title = 'My Planner';
+        };
+    }, []);
 
     const formik = useFormik({
         initialValues: {
@@ -155,7 +162,7 @@ export default function ChangePasswordPage() {
                                 type="button"
                                 variant="ghost"
                                 onClick={() => navigate('/profile')}
-                                className="text-slate-400 hover:text-white"
+                                className="border-slate-600 bg-slate-800 text-white"
                             >
                                 Cancel
                             </Button>

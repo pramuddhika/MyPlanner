@@ -25,6 +25,13 @@ export default function ProfilePage() {
     const [profileEmail, setProfileEmail] = useState(email || '');
 
     useEffect(() => {
+        document.title = 'Profile | My Planner';
+        return () => {
+            document.title = 'My Planner';
+        };
+    }, []);
+
+    useEffect(() => {
         const loadProfile = async () => {
             try {
                 const res = await authService.getProfile();
@@ -147,7 +154,7 @@ export default function ProfilePage() {
                     <Button
                         variant="outline"
                         onClick={() => navigate('/change-password')}
-                        className="border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-600"
+                        className="border-slate-600 bg-slate-800 text-white"
                     >
                         Change Password
                     </Button>
