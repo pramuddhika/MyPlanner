@@ -233,7 +233,6 @@ npm run dev
 | ---------------------- | --------------------------------- |
 | `mvn clean install`    | Install dependencies & build      |
 | `mvn spring-boot:run`  | Start the backend server          |
-| `mvn test`             | Run tests                         |
 
 ### Frontend
 
@@ -241,9 +240,7 @@ npm run dev
 | ----------------- | ------------------------------------ |
 | `npm install`     | Install dependencies                 |
 | `npm run dev`     | Start dev server (hot reload)        |
-| `npm run build`   | Build for production                 |
-| `npm run preview` | Preview production build             |
-| `npm run lint`    | Run ESLint                           |
+
 
 ---
 
