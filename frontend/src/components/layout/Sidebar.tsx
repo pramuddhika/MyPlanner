@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import type { RootState, AppDispatch } from '@/store';
-import { toggleSidebar, setSelectedDate, setCurrentMonth } from '@/store/slices/uiSlice';
+import { toggleSidebar, setSelectedDate, setCurrentMonth, setCalendarFilters, clearCalendarFilters } from '@/store/slices/uiSlice';
 import { fetchCategories, deleteCategory } from '@/store/slices/categorySlice';
 import { CreateCategoryDialog } from '@/components/categories/CreateCategoryDialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -58,10 +58,18 @@ export default function Sidebar() {
         const today = dayjs();
         dispatch(setSelectedDate(today.format('YYYY-MM-DD')));
         dispatch(setCurrentMonth(today.format('YYYY-MM')));
+        dispatch(clearCalendarFilters());
         if (location.pathname !== '/dashboard') navigate('/dashboard');
     };
 
     const handleAllTasksClick = () => {
+        dispatch(setSelectedDate(null));
+        dispatch(clearCalendarFilters());
+        if (location.pathname !== '/dashboard') navigate('/dashboard');
+    };
+
+    const handleCategoryClick = (categoryId: number) => {
+        dispatch(setCalendarFilters({ categoryId }));
         dispatch(setSelectedDate(null));
         if (location.pathname !== '/dashboard') navigate('/dashboard');
     };
@@ -165,23 +173,32 @@ export default function Sidebar() {
                             </button>
                         </div>
                         <div className="space-y-0.5">
-                            {categories.map((cat) => (
-                                <div
-                                    key={cat.categoryId}
-                                    className="group flex items-center justify-between px-3 py-2 rounded-lg text-sm text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all duration-150 cursor-pointer"
-                                >
-                                    <div className="flex items-center gap-3 overflow-hidden">
-                                        <Folder className="w-4 h-4 shrink-0 text-slate-500" />
-                                        <span className="truncate">{cat.categoryName}</span>
-                                    </div>
-                                    <button
-                                        onClick={(e) => handleDeleteCategory(cat.categoryId, e)}
-                                        className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-all"
+                            {categories.map((cat) => {
+                                const isCategoryActive = selectedCategoryId === cat.categoryId && location.pathname === '/dashboard';
+                                return (
+                                    <div
+                                        key={cat.categoryId}
+                                        onClick={() => handleCategoryClick(cat.categoryId)}
+                                        className={cn(
+                                            'group flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 cursor-pointer',
+                                            isCategoryActive
+                                                ? 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
+                                                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                                        )}
                                     >
-                                        <Trash2 className="w-3.5 h-3.5" />
-                                    </button>
-                                </div>
-                            ))}
+                                        <div className="flex items-center gap-3 overflow-hidden">
+                                            <Folder className={cn('w-4 h-4 shrink-0', isCategoryActive ? 'text-violet-400' : 'text-slate-500')} />
+                                            <span className="truncate">{cat.categoryName}</span>
+                                        </div>
+                                        <button
+                                            onClick={(e) => handleDeleteCategory(cat.categoryId, e)}
+                                            className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-all"
+                                        >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 )}

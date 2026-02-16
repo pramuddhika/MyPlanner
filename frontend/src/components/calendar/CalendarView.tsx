@@ -44,9 +44,6 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
   const { currentMonth, selectedDate, calendarFilters } = useSelector(
     (state: RootState) => state.ui,
   );
-  const categories = useSelector(
-    (state: RootState) => state.categories.categories,
-  );
   const statuses = useSelector((state: RootState) => state.statuses.statuses);
 
   const currentMonthDate = dayjs(currentMonth + "-01");
@@ -120,7 +117,7 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
 
   const today = dayjs().format("YYYY-MM-DD");
   const hasActiveFilters =
-    calendarFilters.statusId || calendarFilters.categoryId;
+    calendarFilters.statusId;
 
   return (
     <div className="h-full flex flex-col">
@@ -194,41 +191,12 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
             </SelectContent>
           </Select>
 
-          <Select
-            value={calendarFilters.categoryId?.toString() || "all"}
-            onValueChange={(val) =>
-              dispatch(
-                setCalendarFilters({
-                  categoryId: val === "all" ? null : Number(val),
-                }),
-              )
-            }
-          >
-            <SelectTrigger className="w-[130px] h-8 bg-slate-800/50 border-slate-700/50 text-slate-300 text-xs">
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent className="bg-slate-800 border-slate-700">
-              <SelectItem value="all" className="text-slate-300 text-xs">
-                All Categories
-              </SelectItem>
-              {categories.map((c) => (
-                <SelectItem
-                  key={c.categoryId}
-                  value={c.categoryId.toString()}
-                  className="text-slate-300 text-xs"
-                >
-                  {c.categoryName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
           {hasActiveFilters && (
             <Button
               variant="ghost"
               size="icon-sm"
               onClick={() => dispatch(clearCalendarFilters())}
-              className="text-slate-400 hover:text-white"
+              className="text-slate-400 hover:text-red-400 hover:bg-red-500/10"
             >
               <X className="w-3.5 h-3.5" />
             </Button>
