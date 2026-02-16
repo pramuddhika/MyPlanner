@@ -22,12 +22,9 @@ class WebSocketService {
             return;
         }
 
-        // Create SockJS instance
-        const socket = new SockJS('http://localhost:8080/ws');
-
-        // Create STOMP client
+        // Create STOMP client with a factory that creates a fresh SockJS on each (re)connect
         this.client = new Client({
-            webSocketFactory: () => socket as any,
+            webSocketFactory: () => new SockJS('http://localhost:8080/ws') as any,
             connectHeaders: {
                 Authorization: `Bearer ${token}`,
             },

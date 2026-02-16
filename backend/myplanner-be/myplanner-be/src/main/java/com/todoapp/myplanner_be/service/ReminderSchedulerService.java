@@ -28,7 +28,7 @@ public class ReminderSchedulerService {
     /**
      * Runs every 1 minute to check for due task reminders
      */
-    @Scheduled(fixedRate = 60000) // 60000 ms = 1 minute
+    @Scheduled(fixedRate = 30000) // 30000 ms = 30 seconds
     @Transactional
     public void checkAndSendReminders() {
         logger.info("Checking for due task reminders...");

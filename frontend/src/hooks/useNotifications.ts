@@ -29,7 +29,8 @@ export const useNotifications = () => {
 
             // Subscribe to notifications
             const unsubscribe = websocketService.onNotification((notification: TaskNotification) => {
-                console.log('Handling notification:', notification);
+                console.log(`🔔 [Notification] Task topic: "${notification.topic}" (taskId: ${notification.taskId}, time: ${notification.timestamp})`);
+                console.log('Notification details:', notification);
 
                 // Show browser notification
                 if ('Notification' in window && Notification.permission === 'granted') {
