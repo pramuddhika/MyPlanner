@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import { websocketService } from '@/services/websocketService';
 import type { TaskNotification } from '@/services/websocketService';
-import { useToast } from '@/hooks/use-toast';
+import toast from 'react-hot-toast';
 
 export const useNotifications = () => {
-    const { toast } = useToast();
     const { userId, token } = useSelector((state: RootState) => state.auth);
     const hasRequestedPermission = useRef(false);
 
@@ -29,17 +28,19 @@ export const useNotifications = () => {
         if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Task Reminder', {
                 body: notification.message,
-                icon: '/vite.svg', // You can replace with your app icon
                 tag: `task-${notification.taskId}`,
                 requireInteraction: false,
             });
         }
 
         // Show toast notification
-        toast({
-            title: '🔔 Task Reminder',
-            description: notification.message,
+        toast('🔔 ' + notification.message, {
             duration: 10000, // 10 seconds
+            style: {
+                background: '#1e293b',
+                color: '#fff',
+                border: '1px solid #334155',
+            },
         });
     };
 
