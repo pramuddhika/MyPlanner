@@ -155,7 +155,7 @@ export default function ChangePasswordPage() {
                                 type="button"
                                 variant="ghost"
                                 onClick={() => navigate('/profile')}
-                                className="text-slate-400 hover:text-white"
+                                className="border-slate-600 bg-slate-800 text-white"
                             >
                                 Cancel
                             </Button>

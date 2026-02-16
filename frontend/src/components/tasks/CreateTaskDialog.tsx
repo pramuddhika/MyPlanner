@@ -233,7 +233,7 @@ export function CreateTaskDialog({ open, onOpenChange, defaultDate }: Props) {
                             type="button"
                             variant="ghost"
                             onClick={() => onOpenChange(false)}
-                            className="text-slate-400 hover:text-white"
+                            className="border-slate-600 bg-slate-800 text-white"
                         >
                             Cancel
                         </Button>

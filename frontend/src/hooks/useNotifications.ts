@@ -21,29 +21,6 @@ export const useNotifications = () => {
         }
     }, []);
 
-    const handleNotification = (notification: TaskNotification) => {
-        console.log('Handling notification:', notification);
-
-        // Show browser notification
-        if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification('Task Reminder', {
-                body: notification.message,
-                tag: `task-${notification.taskId}`,
-                requireInteraction: false,
-            });
-        }
-
-        // Show toast notification
-        toast('🔔 ' + notification.message, {
-            duration: 10000, // 10 seconds
-            style: {
-                background: '#1e293b',
-                color: '#fff',
-                border: '1px solid #334155',
-            },
-        });
-    };
-
      useEffect(() => {
         // Connect to WebSocket when user is authenticated
         if (userId && token) {
@@ -52,7 +29,26 @@ export const useNotifications = () => {
 
             // Subscribe to notifications
             const unsubscribe = websocketService.onNotification((notification: TaskNotification) => {
-                handleNotification(notification);
+                console.log('Handling notification:', notification);
+
+                // Show browser notification
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Task Reminder', {
+                        body: notification.message,
+                        tag: `task-${notification.taskId}`,
+                        requireInteraction: false,
+                    });
+                }
+
+                // Show toast notification
+                toast('🔔 ' + notification.message, {
+                    duration: 10000,
+                    style: {
+                        background: '#1e293b',
+                        color: '#fff',
+                        border: '1px solid #334155',
+                    },
+                });
             });
 
             // Cleanup on unmount
