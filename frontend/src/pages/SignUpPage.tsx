@@ -12,7 +12,7 @@ import { CheckSquare, Loader2, Eye, EyeOff } from 'lucide-react';
 const signUpSchema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Name must be at least 2 characters')
-        .max(100, 'Name must not exceed 100 characters')
+        .max(45, 'Name must not exceed 45 characters')
         .required('Name is required'),
     email: Yup.string()
         .email('Please enter a valid email')

@@ -23,7 +23,7 @@ public class UserCreationDTO {
     private String email;
     
     @NotBlank(message = "Name is required")
-    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    @Size(min = 2, max = 45, message = "Name must be between 2 and 45 characters")
     @Schema(
         description = "User's full name",
         example = "John Doe"
