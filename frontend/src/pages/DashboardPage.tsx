@@ -17,13 +17,34 @@ import { useNotifications } from '@/hooks/useNotifications';
 export default function DashboardPage() {
     const dispatch = useDispatch<AppDispatch>();
     const { tasks, loading } = useSelector((state: RootState) => state.tasks);
-    const { currentMonth, rightPanelOpen, selectedTaskId, selectedDate } = useSelector(
+    const { currentMonth, rightPanelOpen, selectedTaskId, selectedDate, calendarFilters } = useSelector(
         (state: RootState) => state.ui
     );
+    const categories = useSelector((state: RootState) => state.categories.categories);
     const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
     // Initialize WebSocket notifications
     useNotifications();
+
+    // Update document title based on active view
+    useEffect(() => {
+        const today = dayjs().format('YYYY-MM-DD');
+        
+        if (calendarFilters.categoryId) {
+            const category = categories.find(c => c.categoryId === calendarFilters.categoryId);
+            document.title = category ? `${category.categoryName} | My Planner` : 'My Planner';
+        } else if (selectedDate === today) {
+            document.title = 'Today | My Planner';
+        } else if (selectedDate === null) {
+            document.title = 'All Tasks | My Planner';
+        } else {
+            document.title = `${dayjs(selectedDate).format('MMM D, YYYY')} | My Planner`;
+        }
+
+        return () => {
+            document.title = 'My Planner';
+        };
+    }, [selectedDate, calendarFilters.categoryId, categories]);
 
     // Fetch tasks when month changes
     useEffect(() => {

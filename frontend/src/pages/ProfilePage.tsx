@@ -25,6 +25,13 @@ export default function ProfilePage() {
     const [profileEmail, setProfileEmail] = useState(email || '');
 
     useEffect(() => {
+        document.title = 'Profile | My Planner';
+        return () => {
+            document.title = 'My Planner';
+        };
+    }, []);
+
+    useEffect(() => {
         const loadProfile = async () => {
             try {
                 const res = await authService.getProfile();
