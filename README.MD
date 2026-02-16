@@ -30,7 +30,7 @@ Make sure you have the following installed before starting:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/MyPlanner.git
+git clone https://github.com/pramuddhika/MyPlanner.git
 ```
 
 ```bash
@@ -203,7 +203,7 @@ MyPlanner/
 
 ```bash
 # 1. Clone
-git clone https://github.com/<your-username>/MyPlanner.git
+git clone https://github.com/pramuddhika/MyPlanner.git
 cd MyPlanner
 
 # 2. Database setup
