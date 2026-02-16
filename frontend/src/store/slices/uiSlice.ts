@@ -1,6 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 
+export type Theme = 'light' | 'dark';
+
 interface CalendarFilters {
     statusId: number | null;
     categoryId: number | null;
@@ -13,6 +15,7 @@ interface UIState {
     currentMonth: string; // format YYYY-MM
     calendarFilters: CalendarFilters;
     rightPanelOpen: boolean;
+    theme: Theme;
 }
 
 const initialState: UIState = {
@@ -25,6 +28,7 @@ const initialState: UIState = {
         categoryId: null,
     },
     rightPanelOpen: false,
+    theme: 'dark',
 };
 
 const uiSlice = createSlice({
@@ -59,6 +63,12 @@ const uiSlice = createSlice({
             state.rightPanelOpen = false;
             state.selectedTaskId = null;
         },
+        setTheme: (state, action: PayloadAction<Theme>) => {
+            state.theme = action.payload;
+        },
+        toggleTheme: (state) => {
+            state.theme = state.theme === 'dark' ? 'light' : 'dark';
+        },
         resetUI: () => initialState,
     },
 });
@@ -72,6 +82,8 @@ export const {
     setCalendarFilters,
     clearCalendarFilters,
     closeRightPanel,
+    setTheme,
+    toggleTheme,
     resetUI,
 } = uiSlice.actions;
 

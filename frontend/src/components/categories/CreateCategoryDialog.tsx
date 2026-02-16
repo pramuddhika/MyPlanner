@@ -52,9 +52,9 @@ export function CreateCategoryDialog({ open, onOpenChange }: Props) {
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-slate-900 border-slate-800 text-white sm:max-w-md">
+            <DialogContent className="bg-white dark:bg-slate-900 border-gray-200 dark:border-slate-800 text-gray-900 dark:text-white sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2 text-white">
+                    <DialogTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                         <FolderPlus className="w-5 h-5 text-violet-400" />
                         New Category
                     </DialogTitle>
@@ -62,14 +62,14 @@ export function CreateCategoryDialog({ open, onOpenChange }: Props) {
 
                 <form onSubmit={formik.handleSubmit} className="space-y-4 mt-2">
                     <div className="space-y-2">
-                        <Label htmlFor="categoryName" className="text-slate-300 text-sm">
+                        <Label htmlFor="categoryName" className="text-gray-700 dark:text-slate-300 text-sm">
                             Category Name
                         </Label>
                         <Input
                             id="categoryName"
                             placeholder="e.g. Homework, Work, Personal"
                             {...formik.getFieldProps('categoryName')}
-                            className="bg-slate-800/50 border-slate-700/50 text-white placeholder:text-slate-500 focus:border-violet-500 h-10"
+                            className="bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-violet-500 h-10"
                         />
                         {formik.touched.categoryName && formik.errors.categoryName && (
                             <p className="text-red-400 text-xs">{formik.errors.categoryName}</p>
@@ -81,7 +81,7 @@ export function CreateCategoryDialog({ open, onOpenChange }: Props) {
                             type="button"
                             variant="ghost"
                             onClick={() => onOpenChange(false)}
-                            className="border-slate-600 bg-slate-800 text-white"
+                            className="border-gray-300 dark:border-slate-600 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white"
                         >
                             Cancel
                         </Button>

@@ -22,10 +22,10 @@ import {
 import { ChevronLeft, ChevronRight, Filter, X } from "lucide-react";
 
 const STATUS_COLORS: Record<string, string> = {
-  "To Do": "bg-blue-500/20 text-blue-300 border-blue-500/30",
-  "In Progress": "bg-amber-500/20 text-amber-300 border-amber-500/30",
-  Completed: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
-  Done: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
+  "To Do": "bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-500/30",
+  "In Progress": "bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/30",
+  Completed: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/30",
+  Done: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/30",
 };
 
 const STATUS_DOT: Record<string, string> = {
@@ -122,7 +122,7 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/60">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-slate-800/60">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
             <Button
@@ -135,7 +135,7 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
                   ),
                 )
               }
-              className="text-slate-400 hover:text-white hover:bg-slate-800"
+              className="text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800"
             >
               <ChevronLeft className="w-4 h-4" />
             </Button>
@@ -149,19 +149,19 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
                   ),
                 )
               }
-              className="text-slate-400 hover:text-white hover:bg-slate-800"
+              className="text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800"
             >
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
             {currentMonthDate.format("MMMM YYYY")}
           </h2>
         </div>
 
         {/* Filters */}
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-slate-500" />
+          <Filter className="w-4 h-4 text-gray-400 dark:text-slate-500" />
           <Select
             value={calendarFilters.statusId?.toString() || "all"}
             onValueChange={(val) =>
@@ -172,18 +172,18 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
               )
             }
           >
-            <SelectTrigger className="w-[130px] h-8 bg-slate-800/50 border-slate-700/50 text-slate-300 text-xs">
+            <SelectTrigger className="w-[130px] h-8 bg-gray-100 dark:bg-slate-800/50 border-gray-200 dark:border-slate-700/50 text-gray-700 dark:text-slate-300 text-xs">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent className="bg-slate-800 border-slate-700">
-              <SelectItem value="all" className="text-slate-300 text-xs">
+            <SelectContent className="bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700">
+              <SelectItem value="all" className="text-gray-700 dark:text-slate-300 text-xs">
                 All Status
               </SelectItem>
               {statuses.map((s) => (
                 <SelectItem
                   key={s.statusId}
                   value={s.statusId.toString()}
-                  className="text-slate-300 text-xs"
+                  className="text-gray-700 dark:text-slate-300 text-xs"
                 >
                   {s.statusName}
                 </SelectItem>
@@ -196,7 +196,7 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
               variant="ghost"
               size="icon-sm"
               onClick={() => dispatch(clearCalendarFilters())}
-              className="text-slate-400 hover:text-red-400 hover:bg-red-500/10"
+              className="text-gray-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
             >
               <X className="w-3.5 h-3.5" />
             </Button>
@@ -205,11 +205,11 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
       </div>
 
       {/* Day headers */}
-      <div className="grid grid-cols-7 border-b border-slate-800/60">
+      <div className="grid grid-cols-7 border-b border-gray-200 dark:border-slate-800/60">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
           <div
             key={day}
-            className="py-2.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider"
+            className="py-2.5 text-center text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider"
           >
             {day}
           </div>
@@ -229,9 +229,9 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
               key={idx}
               onClick={() => dispatch(setSelectedDate(dateStr))}
               className={cn(
-                "relative flex flex-col items-start p-1.5 border-r border-b border-slate-800/40 transition-all duration-150 text-left overflow-hidden",
-                "hover:bg-slate-800/30",
-                !isCurrentMonth && "bg-slate-950/50",
+                "relative flex flex-col items-start p-1.5 border-r border-b border-gray-200 dark:border-slate-800/40 transition-all duration-150 text-left overflow-hidden",
+                "hover:bg-gray-50 dark:hover:bg-slate-800/30",
+                !isCurrentMonth && "bg-gray-100/50 dark:bg-slate-950/50",
                 isSelected && "bg-violet-500/10 ring-1 ring-violet-500/30",
                 isToday && !isSelected && "bg-violet-500/5",
               )}
@@ -239,7 +239,7 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
               <span
                 className={cn(
                   "text-xs font-medium mb-1 w-6 h-6 flex items-center justify-center rounded-full",
-                  isCurrentMonth ? "text-slate-300" : "text-slate-600",
+                  isCurrentMonth ? "text-gray-700 dark:text-slate-300" : "text-gray-300 dark:text-slate-600",
                   isToday && "bg-violet-600 text-white font-bold shadow-sm",
                   isSelected && !isToday && "text-violet-300",
                 )}
@@ -255,13 +255,13 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
                     className={cn(
                       "flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] truncate",
                       STATUS_COLORS[task.status.statusName] ||
-                        "bg-slate-700/50 text-slate-300",
+                        "bg-gray-200 dark:bg-slate-700/50 text-gray-600 dark:text-slate-300",
                     )}
                   >
                     <span
                       className={cn(
                         "w-1.5 h-1.5 rounded-full shrink-0",
-                        STATUS_DOT[task.status.statusName] || "bg-slate-400",
+                        STATUS_DOT[task.status.statusName] || "bg-gray-400 dark:bg-slate-400",
                       )}
                     />
                     <span className="truncate">{task.topic}</span>
@@ -270,7 +270,7 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
                 {dayTasks.length > 3 && (
                   <Badge
                     variant="secondary"
-                    className="text-[9px] h-4 px-1 bg-slate-700/50 text-slate-400"
+                    className="text-[9px] h-4 px-1 bg-gray-200 dark:bg-slate-700/50 text-gray-500 dark:text-slate-400"
                   >
                     +{dayTasks.length - 3} more
                   </Badge>

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import type { RootState, AppDispatch } from '@/store';
-import { toggleSidebar, setSelectedDate, setCurrentMonth, setCalendarFilters, clearCalendarFilters } from '@/store/slices/uiSlice';
+import { toggleSidebar, setSelectedDate, setCurrentMonth, setCalendarFilters, clearCalendarFilters, toggleTheme } from '@/store/slices/uiSlice';
 import { fetchCategories, deleteCategory } from '@/store/slices/categorySlice';
 import { CreateCategoryDialog } from '@/components/categories/CreateCategoryDialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -24,6 +24,8 @@ import {
     LogOut,
     Trash2,
     Folder,
+    Sun,
+    Moon,
 } from 'lucide-react';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -38,6 +40,7 @@ export default function Sidebar() {
     const collapsed = useSelector((state: RootState) => state.ui.sidebarCollapsed);
     const selectedCategoryId = useSelector((state: RootState) => state.ui.calendarFilters.categoryId);
     const categories = useSelector((state: RootState) => state.categories.categories);
+    const theme = useSelector((state: RootState) => state.ui.theme);
     const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
 
     useEffect(() => {
@@ -84,7 +87,7 @@ export default function Sidebar() {
     return (
         <div
             className={cn(
-                'h-screen bg-slate-950 border-r border-slate-800/60 flex flex-col transition-all duration-300 ease-in-out',
+                'h-screen bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800/60 flex flex-col transition-all duration-300 ease-in-out',
                 collapsed ? 'w-[68px]' : 'w-[260px]'
             )}
         >
@@ -95,20 +98,20 @@ export default function Sidebar() {
                         <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-violet-500/20">
                             <CheckSquare className="w-4 h-4 text-white" />
                         </div>
-                        <span className="text-white font-bold text-lg tracking-tight">MyPlanner</span>
+                        <span className="text-gray-900 dark:text-white font-bold text-lg tracking-tight">MyPlanner</span>
                     </div>
                 )}
                 <Button
                     variant="ghost"
                     size="icon-sm"
                     onClick={() => dispatch(toggleSidebar())}
-                    className="text-slate-400 hover:text-white hover:bg-slate-800/60"
+                    className="text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800/60"
                 >
                     {collapsed ? <PanelLeft className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
                 </Button>
             </div>
 
-            <Separator className="bg-slate-800/60" />
+            <Separator className="bg-gray-200 dark:bg-slate-800/60" />
 
             {/* Navigation */}
             <ScrollArea className="flex-1 px-3 py-3">
@@ -120,8 +123,8 @@ export default function Sidebar() {
                                 onClick={handleTodayClick}
                                 className={cn(
                                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
-                                    'text-slate-300 hover:text-white hover:bg-slate-800/60',
-                                    isTodayActive && 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
+                                    'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800/60',
+                                    isTodayActive && 'bg-violet-500/15 text-violet-600 dark:text-violet-300 border border-violet-500/20'
                                 )}
                             >
                                 <CalendarDays className="w-4 h-4 shrink-0" />
@@ -129,7 +132,7 @@ export default function Sidebar() {
                             </button>
                         </TooltipTrigger>
                         {collapsed && (
-                            <TooltipContent side="right" className="bg-slate-800 text-white border-slate-700">
+                            <TooltipContent side="right" className="bg-white dark:bg-slate-800 text-gray-900 dark:text-white border-gray-200 dark:border-slate-700">
                                 Today
                             </TooltipContent>
                         )}
@@ -142,8 +145,8 @@ export default function Sidebar() {
                                 onClick={handleAllTasksClick}
                                 className={cn(
                                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
-                                    'text-slate-300 hover:text-white hover:bg-slate-800/60',
-                                    isAllTasksActive && 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
+                                    'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800/60',
+                                    isAllTasksActive && 'bg-violet-500/15 text-violet-600 dark:text-violet-300 border border-violet-500/20'
                                 )}
                             >
                                 <ListTodo className="w-4 h-4 shrink-0" />
@@ -151,7 +154,7 @@ export default function Sidebar() {
                             </button>
                         </TooltipTrigger>
                         {collapsed && (
-                            <TooltipContent side="right" className="bg-slate-800 text-white border-slate-700">
+                            <TooltipContent side="right" className="bg-white dark:bg-slate-800 text-gray-900 dark:text-white border-gray-200 dark:border-slate-700">
                                 All Tasks
                             </TooltipContent>
                         )}
@@ -162,12 +165,12 @@ export default function Sidebar() {
                 {!collapsed && (
                     <div className="mt-6">
                         <div className="flex items-center justify-between px-3 mb-2">
-                            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            <span className="text-xs font-semibold text-gray-400 dark:text-slate-500 uppercase tracking-wider">
                                 Categories
                             </span>
                             <button
                                 onClick={() => setCategoryDialogOpen(true)}
-                                className="text-slate-500 hover:text-violet-400 transition-colors"
+                                className="text-gray-400 dark:text-slate-500 hover:text-violet-500 dark:hover:text-violet-400 transition-colors"
                             >
                                 <Plus className="w-3.5 h-3.5" />
                             </button>
@@ -182,17 +185,17 @@ export default function Sidebar() {
                                         className={cn(
                                             'group flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 cursor-pointer',
                                             isCategoryActive
-                                                ? 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
-                                                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                                                ? 'bg-violet-500/15 text-violet-600 dark:text-violet-300 border border-violet-500/20'
+                                                : 'text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800/60'
                                         )}
                                     >
                                         <div className="flex items-center gap-3 overflow-hidden">
-                                            <Folder className={cn('w-4 h-4 shrink-0', isCategoryActive ? 'text-violet-400' : 'text-slate-500')} />
+                                            <Folder className={cn('w-4 h-4 shrink-0', isCategoryActive ? 'text-violet-500 dark:text-violet-400' : 'text-gray-400 dark:text-slate-500')} />
                                             <span className="truncate">{cat.categoryName}</span>
                                         </div>
                                         <button
                                             onClick={(e) => handleDeleteCategory(cat.categoryId, e)}
-                                            className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-all"
+                                            className="opacity-0 group-hover:opacity-100 text-gray-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-all"
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -209,12 +212,12 @@ export default function Sidebar() {
                             <TooltipTrigger asChild>
                                 <button
                                     onClick={() => setCategoryDialogOpen(true)}
-                                    className="w-full flex items-center justify-center py-2.5 rounded-lg text-slate-400 hover:text-violet-400 hover:bg-slate-800/60 transition-colors"
+                                    className="w-full flex items-center justify-center py-2.5 rounded-lg text-gray-500 dark:text-slate-400 hover:text-violet-500 dark:hover:text-violet-400 hover:bg-gray-100 dark:hover:bg-slate-800/60 transition-colors"
                                 >
                                     <Plus className="w-4 h-4" />
                                 </button>
                             </TooltipTrigger>
-                            <TooltipContent side="right" className="bg-slate-800 text-white border-slate-700">
+                            <TooltipContent side="right" className="bg-white dark:bg-slate-800 text-gray-900 dark:text-white border-gray-200 dark:border-slate-700">
                                 Add Category
                             </TooltipContent>
                         </Tooltip>
@@ -222,18 +225,40 @@ export default function Sidebar() {
                 )}
             </ScrollArea>
 
-            <Separator className="bg-slate-800/60" />
+            <Separator className="bg-gray-200 dark:bg-slate-800/60" />
 
             {/* Footer */}
             <div className="p-3 space-y-1">
+                {/* Theme Toggle */}
+                <Tooltip delayDuration={0}>
+                    <TooltipTrigger asChild>
+                        <button
+                            onClick={() => dispatch(toggleTheme())}
+                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 dark:text-slate-400 hover:text-amber-600 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-500/10 transition-all duration-150"
+                        >
+                            {theme === 'dark' ? (
+                                <Sun className="w-4 h-4 shrink-0" />
+                            ) : (
+                                <Moon className="w-4 h-4 shrink-0" />
+                            )}
+                            {!collapsed && <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>}
+                        </button>
+                    </TooltipTrigger>
+                    {collapsed && (
+                        <TooltipContent side="right" className="bg-white dark:bg-slate-800 text-gray-900 dark:text-white border-gray-200 dark:border-slate-700">
+                            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                        </TooltipContent>
+                    )}
+                </Tooltip>
+
                 <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                         <button
                             onClick={() => navigate('/profile')}
                             className={cn(
                                 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150',
-                                'text-slate-300 hover:text-white hover:bg-slate-800/60',
-                                location.pathname === '/profile' && 'bg-violet-500/15 text-violet-300 border border-violet-500/20'
+                                'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800/60',
+                                location.pathname === '/profile' && 'bg-violet-500/15 text-violet-600 dark:text-violet-300 border border-violet-500/20'
                             )}
                         >
                             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xs font-bold text-white shrink-0">
@@ -243,7 +268,7 @@ export default function Sidebar() {
                         </button>
                     </TooltipTrigger>
                     {collapsed && (
-                        <TooltipContent side="right" className="bg-slate-800 text-white border-slate-700">
+                        <TooltipContent side="right" className="bg-white dark:bg-slate-800 text-gray-900 dark:text-white border-gray-200 dark:border-slate-700">
                             Profile
                         </TooltipContent>
                     )}
@@ -253,14 +278,14 @@ export default function Sidebar() {
                     <TooltipTrigger asChild>
                         <button
                             onClick={logout}
-                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-150"
+                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 dark:text-slate-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-150"
                         >
                             <LogOut className="w-4 h-4 shrink-0" />
                             {!collapsed && <span>Logout</span>}
                         </button>
                     </TooltipTrigger>
                     {collapsed && (
-                        <TooltipContent side="right" className="bg-slate-800 text-white border-slate-700">
+                        <TooltipContent side="right" className="bg-white dark:bg-slate-800 text-gray-900 dark:text-white border-gray-200 dark:border-slate-700">
                             Logout
                         </TooltipContent>
                     )}

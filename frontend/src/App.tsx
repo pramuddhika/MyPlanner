@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import ProtectedRoute from '@/components/layout/ProtectedRoute';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -8,8 +10,12 @@ import SignUpPage from '@/pages/SignUpPage';
 import DashboardPage from '@/pages/DashboardPage';
 import ProfilePage from '@/pages/ProfilePage';
 import ChangePasswordPage from '@/pages/ChangePasswordPage';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function App() {
+  const theme = useTheme();
+  const isDark = useSelector((state: RootState) => state.ui.theme === 'dark');
+
   return (
     <TooltipProvider delayDuration={0}>
       <BrowserRouter>
@@ -42,20 +48,20 @@ export default function App() {
         toastOptions={{
           duration: 3000,
           style: {
-            background: '#1e293b',
-            color: '#fff',
-            border: '1px solid #334155',
+            background: isDark ? '#1e293b' : '#ffffff',
+            color: isDark ? '#fff' : '#1e293b',
+            border: isDark ? '1px solid #334155' : '1px solid #e2e8f0',
           },
           success: {
             iconTheme: {
               primary: '#10b981',
-              secondary: '#fff',
+              secondary: isDark ? '#fff' : '#ffffff',
             },
           },
           error: {
             iconTheme: {
               primary: '#ef4444',
-              secondary: '#fff',
+              secondary: isDark ? '#fff' : '#ffffff',
             },
           },
         }}
