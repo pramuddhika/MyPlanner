@@ -138,7 +138,7 @@ export default function CalendarView({ tasks }: CalendarViewProps) {
                             onClick={() => dispatch(setCurrentMonth(dayjs().format('YYYY-MM')))}
                             className="text-slate-400 hover:text-white hover:bg-slate-800 text-xs"
                         >
-                            Today
+                            Today 
                         </Button>
                         <Button
                             variant="ghost"

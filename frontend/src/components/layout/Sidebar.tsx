@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import type { RootState, AppDispatch } from '@/store';
-import { toggleSidebar, setSelectedDate } from '@/store/slices/uiSlice';
+import { toggleSidebar, setSelectedDate, setCurrentMonth } from '@/store/slices/uiSlice';
 import { fetchCategories, deleteCategory } from '@/store/slices/categorySlice';
 import { CreateCategoryDialog } from '@/components/categories/CreateCategoryDialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -55,7 +55,9 @@ export default function Sidebar() {
     };
 
     const handleTodayClick = () => {
-        dispatch(setSelectedDate(dayjs().format('YYYY-MM-DD')));
+        const today = dayjs();
+        dispatch(setSelectedDate(today.format('YYYY-MM-DD')));
+        dispatch(setCurrentMonth(today.format('YYYY-MM')));
         if (location.pathname !== '/dashboard') navigate('/dashboard');
     };
 
